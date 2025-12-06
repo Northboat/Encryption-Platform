@@ -7,7 +7,6 @@
     <list default="true" id="4df1e08c-ea5c-4d4d-932e-fdbf1765c707" name="Changes" comment="Refactor crypto component &amp; fix quadtree search function">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cia/northboat/se/crypto/tree/EncryptedTree.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cia/northboat/se/crypto/tree/EncryptedTree.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/cia/northboat/se/crypto/tree/EncryptedTreeTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cia/northboat/se/crypto/tree/EncryptedTreeTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -36,10 +35,10 @@
   <component name="MavenImportPreferences">
     <option name="generalSettings">
       <MavenGeneralSettings>
-        <option name="customMavenHome" value="C:\Users\admin\northboat\maven\apache-maven-3.9.11" />
-        <option name="localRepository" value="C:\Users\admin\northboat\maven\apache-maven-3.9.11\repo" />
+        <option name="customMavenHome" value="D:\Env\apache-maven-3.9.1" />
+        <option name="localRepository" value="D:\Env\apache-maven-3.9.1\repo" />
         <option name="mavenHomeTypeForPersistence" value="CUSTOM" />
-        <option name="userSettingsFile" value="C:\Users\admin\northboat\maven\apache-maven-3.9.11\conf\settings.xml" />
+        <option name="userSettingsFile" value="D:\Env\apache-maven-3.9.1\conf\settings.xml" />
       </MavenGeneralSettings>
     </option>
   </component>
@@ -82,7 +81,7 @@
     "git-widget-placeholder": "main",
     "junie.onboarding.icon.badge.shown": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/admin/Desktop/Repo/Ark-Encryption-Platform/backend/src/main/resources/test_data",
+    "last_opened_file_path": "E:/File/Repo/cur/Ark-Encryption-Platform/backend/src/main/resources/test_data",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -99,18 +98,18 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\File\Repo\cur\Ark-Encryption-Platform\backend\src\main\resources\test_data" />
       <recent name="C:\Users\admin\Desktop\Repo\Ark-Encryption-Platform\backend\src\main\resources\test_data" />
       <recent name="E:\File\Repo\cur\Ark-Searchable-Encryption\backend\src\main\resources\test_data" />
       <recent name="E:\File\Repo\cur\Ark-Searchable-Encryption\backend\src\main\resources\static\images" />
       <recent name="E:\File\Repo\cur\Ark-Searchable-Encryption\backend\src\main\resources\templates" />
-      <recent name="E:\File\Repo\cur\Ark-Searchable-Encryption\backend\src\main\java\cia\arkrypto\se\utils" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\File\Repo\cur\Ark-Encryption-Platform\backend\src\main\resources\test_data\csv" />
       <recent name="E:\File\Repo\cur\Ark-Searchable-Encryption\backend\src\main\resources\templates\pages" />
       <recent name="E:\File\Repo\cur\Ark-Searchable-Encryption\backend\src\main\resources\file" />
       <recent name="E:\File\Repo\cur\Ark-Searchable-Encryption\backend\src\main\resources" />
       <recent name="E:\File\Repo\cur\Ark-Searchable-Encryption\backend\src\main\resources\word" />
-      <recent name="E:\File\Repo\cur\Ark-Searchable-Encryption\PECK\peck" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="cia.arkrypto.se.test" />
@@ -119,7 +118,7 @@
       <recent name="cia.northboat.utils" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.EncryptedTreeTest.build">
+  <component name="RunManager" selected="JUnit.EncryptedTreeTest.insert">
     <configuration name="Main" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="cia.arkrypto.se.Main" />
       <module name="Ark-Searchable-Encryption" />
@@ -211,8 +210,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.EncryptedTreeTest.build" />
         <item itemvalue="JUnit.EncryptedTreeTest.insert" />
+        <item itemvalue="JUnit.EncryptedTreeTest.build" />
         <item itemvalue="JUnit.EncryptedTreeTest.storageCost" />
         <item itemvalue="JUnit.EncryptedTreeTest" />
         <item itemvalue="Spring Boot.ArkSearchableEncryption" />
@@ -222,8 +221,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.26830.84" />
-        <option value="bundled-js-predefined-d6986cc7102b-3aa1da707db6-JavaScript-IU-252.26830.84" />
+        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.26199.169" />
+        <option value="bundled-js-predefined-d6986cc7102b-9c94529fcfe0-JavaScript-IU-252.26199.169" />
       </set>
     </attachedChunks>
   </component>
@@ -310,6 +309,7 @@
       <workItem from="1762749597332" duration="2174000" />
       <workItem from="1762753654423" duration="1876000" />
       <workItem from="1763274432274" duration="5406000" />
+      <workItem from="1765023567192" duration="595000" />
     </task>
     <task id="LOCAL-00001" summary="update: add PEKS algo &amp; TestUtil">
       <created>1745999105945</created>

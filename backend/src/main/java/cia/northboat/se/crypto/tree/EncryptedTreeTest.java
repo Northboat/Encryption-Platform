@@ -28,7 +28,7 @@ public class EncryptedTreeTest {
     public void setup(){
         int dimension = 3, size = 5000;
         TREE.init(dimension);
-        data = csvReaderUtil.readCsvWithRange("classpath:test_data/hi.csv", 0, dimension-1, size);
+        data = csvReaderUtil.readCsvWithRange("classpath:test_data/csv/hi.csv", 0, dimension-1, size);
         System.out.println(data.size());
     }
 

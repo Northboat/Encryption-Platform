@@ -5,4 +5,4 @@ application.yaml
 target/
 
 # 忽略所有 csv 文件
-*.csv
+#*.csv
