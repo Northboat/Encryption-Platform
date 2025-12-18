@@ -121,7 +121,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${spring-boot.version}</version>
                 <configuration>
-                    <mainClass>cia.northboat.se.ArkSearchableEncryption</mainClass>
+                    <mainClass>cia.northboat.encryption.ArkSearchableEncryption</mainClass>
                     <skip>false</skip>
                     <includeSystemScope>true</includeSystemScope>
                 </configuration>
@@ -142,7 +142,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>cia.northboat.se.ArkSearchableEncryption</mainClass>
+                            <mainClass>cia.northboat.encryption.ArkSearchableEncryption</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

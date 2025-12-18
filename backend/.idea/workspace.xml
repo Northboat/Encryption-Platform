@@ -5,9 +5,103 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4df1e08c-ea5c-4d4d-932e-fdbf1765c707" name="Changes" comment="Refactor crypto component &amp; fix quadtree search function">
+      <change afterPath="$PROJECT_DIR$/src/main/java/cia/northboat/encryption/service/BlockChainService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../README.md" beforeDir="false" afterPath="$PROJECT_DIR$/../README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cia/northboat/se/crypto/tree/EncryptedTreeTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cia/northboat/se/crypto/tree/EncryptedTreeTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cia/northboat/se/ArkSearchableEncryption.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cia/northboat/encryption/ArkSearchableEncryption.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cia/northboat/se/config/CryptoConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cia/northboat/encryption/config/CryptoConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cia/northboat/se/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cia/northboat/encryption/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cia/northboat/se/controller/CryptoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cia/northboat/encryption/controller/CryptoController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cia/northboat/se/controller/RouteController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cia/northboat/encryption/controller/RouteController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cia/northboat/se/crypto/arch/JPBCTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/cia/northboat/encryption/test/JPBCTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cia/northboat/se/crypto/arch/RangedSEArchetype.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cia/northboat/encryption/crypto/arch/RangedSEArchetype.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cia/northboat/se/crypto/auth/Auth.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cia/northboat/encryption/crypto/auth/Auth.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cia/northboat/se/crypto/auth/SignatureSystem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cia/northboat/encryption/crypto/auth/SignatureSystem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cia/northboat/se/crypto/auth/impl/Elgamal.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cia/northboat/encryption/crypto/auth/impl/Elgamal.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cia/northboat/se/crypto/auth/impl/RSA.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cia/northboat/encryption/crypto/auth/impl/RSA.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cia/northboat/se/crypto/auth/impl/SBS.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cia/northboat/encryption/crypto/auth/impl/SBS.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cia/northboat/se/crypto/auth/impl/Schnorr.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cia/northboat/encryption/crypto/auth/impl/Schnorr.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cia/northboat/se/crypto/auth/model/CryptoMap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cia/northboat/encryption/crypto/auth/model/CryptoMap.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cia/northboat/se/crypto/auth/model/KeyPair.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cia/northboat/encryption/crypto/auth/model/KeyPair.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cia/northboat/se/crypto/hash/SimpleMiner.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cia/northboat/encryption/crypto/arch/SimpleMinerArchetype.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cia/northboat/se/crypto/pairing/EncodeTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/cia/northboat/encryption/test/EncodeTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cia/northboat/se/crypto/pairing/PairingSystem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cia/northboat/encryption/crypto/pairing/PairingSystem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cia/northboat/se/crypto/pairing/SearchableEncryption.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cia/northboat/encryption/crypto/pairing/SearchableEncryption.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cia/northboat/se/crypto/pairing/impl/AP.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cia/northboat/encryption/crypto/pairing/impl/AP.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cia/northboat/se/crypto/pairing/impl/CRIMA.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cia/northboat/encryption/crypto/pairing/impl/CRIMA.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cia/northboat/se/crypto/pairing/impl/DIBAEKS.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cia/northboat/encryption/crypto/pairing/impl/DIBAEKS.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cia/northboat/se/crypto/pairing/impl/DPREKS.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cia/northboat/encryption/crypto/pairing/impl/DPREKS.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cia/northboat/se/crypto/pairing/impl/DuMSE.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cia/northboat/encryption/crypto/pairing/impl/DuMSE.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cia/northboat/se/crypto/pairing/impl/FIPECK.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cia/northboat/encryption/crypto/pairing/impl/FIPECK.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cia/northboat/se/crypto/pairing/impl/Gu2CKS.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cia/northboat/encryption/crypto/pairing/impl/Gu2CKS.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cia/northboat/se/crypto/pairing/impl/HVE.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cia/northboat/encryption/crypto/pairing/impl/HVE.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cia/northboat/se/crypto/pairing/impl/PAEKS.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cia/northboat/encryption/crypto/pairing/impl/PAEKS.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cia/northboat/se/crypto/pairing/impl/PAUKS.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cia/northboat/encryption/crypto/pairing/impl/PAUKS.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cia/northboat/se/crypto/pairing/impl/PECKS.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cia/northboat/encryption/crypto/pairing/impl/PECKS.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cia/northboat/se/crypto/pairing/impl/PEKS.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cia/northboat/encryption/crypto/pairing/impl/PEKS.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cia/northboat/se/crypto/pairing/impl/PMatch.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cia/northboat/encryption/crypto/pairing/impl/PMatch.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cia/northboat/se/crypto/pairing/impl/PREKS.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cia/northboat/encryption/crypto/pairing/impl/PREKS.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cia/northboat/se/crypto/pairing/impl/SAPAUKS.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cia/northboat/encryption/crypto/pairing/impl/SAPAUKS.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cia/northboat/se/crypto/pairing/impl/SCF.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cia/northboat/encryption/crypto/pairing/impl/SCF.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cia/northboat/se/crypto/pairing/impl/SPWSE1.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cia/northboat/encryption/crypto/pairing/impl/SPWSE1.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cia/northboat/se/crypto/pairing/impl/SPWSE2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cia/northboat/encryption/crypto/pairing/impl/SPWSE2.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cia/northboat/se/crypto/pairing/impl/TBEKS.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cia/northboat/encryption/crypto/pairing/impl/TBEKS.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cia/northboat/se/crypto/pairing/impl/TMS.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cia/northboat/encryption/crypto/pairing/impl/TMS.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cia/northboat/se/crypto/pairing/impl/Tu2CKS.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cia/northboat/encryption/crypto/pairing/impl/Tu2CKS.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cia/northboat/se/crypto/pairing/impl/TuCR.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cia/northboat/encryption/crypto/pairing/impl/TuCR.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cia/northboat/se/crypto/tree/EncryptedTree.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cia/northboat/encryption/crypto/tree/EncryptedTree.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cia/northboat/se/crypto/tree/EncryptedTreeTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/cia/northboat/encryption/test/EncryptedTreeTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cia/northboat/se/crypto/tree/IPFEUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cia/northboat/encryption/crypto/tree/IPFEMachine.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cia/northboat/se/crypto/tree/model/Ciphertext.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cia/northboat/encryption/crypto/tree/model/Ciphertext.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cia/northboat/se/crypto/tree/model/TreeNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cia/northboat/encryption/crypto/tree/model/TreeNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cia/northboat/se/service/AuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cia/northboat/encryption/service/AuthService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cia/northboat/se/service/BlockChainService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cia/northboat/se/service/IPFETreeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cia/northboat/encryption/service/IPFETreeService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cia/northboat/se/service/PairingService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cia/northboat/encryption/service/PairingService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cia/northboat/se/service/RangedSEService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cia/northboat/encryption/service/RangedSEService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cia/northboat/se/utils/AESUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cia/northboat/encryption/utils/AESUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cia/northboat/se/utils/BitUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cia/northboat/encryption/utils/BitUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cia/northboat/se/utils/CsvReaderUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cia/northboat/encryption/utils/CsvReaderUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cia/northboat/se/utils/EncodeUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cia/northboat/encryption/utils/EncodeUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cia/northboat/se/utils/FileUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cia/northboat/encryption/utils/FileUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cia/northboat/se/utils/HanLPUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cia/northboat/encryption/utils/HanLPUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cia/northboat/se/utils/HashUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cia/northboat/encryption/utils/HashUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cia/northboat/se/utils/PolynomialUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cia/northboat/encryption/utils/PolynomialUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cia/northboat/se/utils/ResultCode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cia/northboat/encryption/utils/ResultCode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cia/northboat/se/utils/ResultUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cia/northboat/encryption/utils/ResultUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cia/northboat/se/utils/TestUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/cia/northboat/encryption/test/PairingTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cia/northboat/se/utils/VFEPlusUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cia/northboat/encryption/utils/VFEPlusUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/test_data/csv/hi.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/test_data/mail/1" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/test_data/mail/10" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/test_data/mail/11" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/test_data/mail/12" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/test_data/mail/13" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/test_data/mail/14" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/test_data/mail/15" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/test_data/mail/16" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/test_data/mail/17" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/test_data/mail/18" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/test_data/mail/19" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/test_data/mail/2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/test_data/mail/20" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/test_data/mail/3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/test_data/mail/4" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/test_data/mail/5" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/test_data/mail/6" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/test_data/mail/7" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/test_data/mail/8" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/test_data/mail/9" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/test_data/word/100.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/test_data/word/2.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/test_data/word/200.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/test_data/word/300.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/test_data/word/400.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/test_data/word/500.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/test_data/word/600.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/test_data/word/700.txt" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,6 +149,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Application.JPBCTest.executor": "Run",
     "Application.QuadtreeTest.executor": "Run",
     "Application.TreeTest.executor": "Run",
     "JUnit.EncryptedTreeTest.build.executor": "Run",
@@ -64,8 +159,10 @@
     "JUnit.EncryptedTreeTest.storageCost.executor": "Run",
     "JUnit.EncryptedTreeTest.test.executor": "Run",
     "JUnit.EncryptedTreeTest.testBuildAndSearch.executor": "Run",
+    "JUnit.PairingTest.singleThreadTest.executor": "Run",
     "Maven.Ark-Searchable-Encryption [clean].executor": "Run",
     "Maven.Ark-Searchable-Encryption [install].executor": "Run",
+    "Maven.Ark-Searchable-Encryption [verify].executor": "Run",
     "RequestMappingsPanelOrder0": "0",
     "RequestMappingsPanelOrder1": "1",
     "RequestMappingsPanelWidth0": "75",
@@ -81,16 +178,16 @@
     "git-widget-placeholder": "main",
     "junie.onboarding.icon.badge.shown": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "E:/File/Repo/cur/Ark-Encryption-Platform/backend/src/main/resources/test_data",
+    "last_opened_file_path": "E:/File/Repo/cur/Ark-Encryption-Platform/backend/src/test/resources",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Libraries",
+    "project.structure.last.edited": "Project",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "MavenSettings",
+    "settings.editor.selected.configurable": "reference.settings.project.maven.runner",
     "spring.configuration.checksum": "2e4a111b4f7ef0f8062896d9ca6239eb",
     "to.speed.mode.migration.done": "true",
     "vue.rearranger.settings.migration": "true"
@@ -98,18 +195,21 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\File\Repo\cur\Ark-Encryption-Platform\backend\src\test\resources" />
       <recent name="E:\File\Repo\cur\Ark-Encryption-Platform\backend\src\main\resources\test_data" />
       <recent name="C:\Users\admin\Desktop\Repo\Ark-Encryption-Platform\backend\src\main\resources\test_data" />
       <recent name="E:\File\Repo\cur\Ark-Searchable-Encryption\backend\src\main\resources\test_data" />
       <recent name="E:\File\Repo\cur\Ark-Searchable-Encryption\backend\src\main\resources\static\images" />
-      <recent name="E:\File\Repo\cur\Ark-Searchable-Encryption\backend\src\main\resources\templates" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\File\Repo\cur\Ark-Encryption-Platform\backend\src\main\resources\static" />
+      <recent name="E:\File\Repo\cur\Ark-Encryption-Platform\backend\src\test\resources" />
+      <recent name="E:\File\Repo\cur\Ark-Encryption-Platform\backend\src\main\resources\data" />
+      <recent name="E:\File\Repo\cur\Ark-Encryption-Platform\backend\src\main\resources" />
       <recent name="E:\File\Repo\cur\Ark-Encryption-Platform\backend\src\main\resources\test_data\csv" />
-      <recent name="E:\File\Repo\cur\Ark-Searchable-Encryption\backend\src\main\resources\templates\pages" />
-      <recent name="E:\File\Repo\cur\Ark-Searchable-Encryption\backend\src\main\resources\file" />
-      <recent name="E:\File\Repo\cur\Ark-Searchable-Encryption\backend\src\main\resources" />
-      <recent name="E:\File\Repo\cur\Ark-Searchable-Encryption\backend\src\main\resources\word" />
+    </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="cia.northboat.se" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="cia.arkrypto.se.test" />
@@ -118,47 +218,29 @@
       <recent name="cia.northboat.utils" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.EncryptedTreeTest.insert">
+  <component name="RunManager" selected="JUnit.PairingTest.singleThreadTest">
+    <configuration name="JPBCTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="cia.northboat.encryption.test.JPBCTest" />
+      <module name="Ark-Searchable-Encryption" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="cia.northboat.encryption.test.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Main" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="cia.arkrypto.se.Main" />
       <module name="Ark-Searchable-Encryption" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="cia.northboat.se.*" />
+          <option name="PATTERN" value="cia.northboat.encryption.test.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="EncryptedTreeTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="Ark-Searchable-Encryption" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="cia.northboat.se.crypto.tree.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="cia.northboat.se.crypto.tree" />
-      <option name="MAIN_CLASS_NAME" value="cia.northboat.se.crypto.tree.EncryptedTreeTest" />
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="EncryptedTreeTest.build" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="Ark-Searchable-Encryption" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="cia.northboat.se.crypto.tree.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="cia.northboat.se.crypto.tree" />
-      <option name="MAIN_CLASS_NAME" value="cia.northboat.se.crypto.tree.EncryptedTreeTest" />
-      <option name="METHOD_NAME" value="build" />
-      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -167,12 +249,12 @@
       <module name="Ark-Searchable-Encryption" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="cia.northboat.se.crypto.tree.*" />
+          <option name="PATTERN" value="cia.northboat.encryption.test.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="cia.northboat.se.crypto.tree" />
-      <option name="MAIN_CLASS_NAME" value="cia.northboat.se.crypto.tree.EncryptedTreeTest" />
+      <option name="PACKAGE_NAME" value="cia.northboat.se.test" />
+      <option name="MAIN_CLASS_NAME" value="cia.northboat.encryption.test.EncryptedTreeTest" />
       <option name="METHOD_NAME" value="insert" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
@@ -183,13 +265,29 @@
       <module name="Ark-Searchable-Encryption" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="cia.northboat.se.crypto.tree.*" />
+          <option name="PATTERN" value="cia.northboat.encryption.test.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="cia.northboat.se.crypto.tree" />
-      <option name="MAIN_CLASS_NAME" value="cia.northboat.se.crypto.tree.EncryptedTreeTest" />
+      <option name="PACKAGE_NAME" value="cia.northboat.se.test" />
+      <option name="MAIN_CLASS_NAME" value="cia.northboat.encryption.test.EncryptedTreeTest" />
       <option name="METHOD_NAME" value="storageCost" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="PairingTest.singleThreadTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Ark-Searchable-Encryption" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="cia.northboat.encryption.test.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="cia.northboat.se.test" />
+      <option name="MAIN_CLASS_NAME" value="cia.northboat.encryption.test.PairingTest" />
+      <option name="METHOD_NAME" value="singleThreadTest" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -197,10 +295,10 @@
     </configuration>
     <configuration name="ArkSearchableEncryption" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
       <module name="Ark-Searchable-Encryption" />
-      <option name="SPRING_BOOT_MAIN_CLASS" value="cia.northboat.se.ArkSearchableEncryption" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="cia.northboat.encryption.ArkSearchableEncryption" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="cia.northboat.se.*" />
+          <option name="PATTERN" value="cia.northboat.encryption.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -210,11 +308,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.PairingTest.singleThreadTest" />
         <item itemvalue="JUnit.EncryptedTreeTest.insert" />
-        <item itemvalue="JUnit.EncryptedTreeTest.build" />
-        <item itemvalue="JUnit.EncryptedTreeTest.storageCost" />
-        <item itemvalue="JUnit.EncryptedTreeTest" />
+        <item itemvalue="Application.JPBCTest" />
         <item itemvalue="Spring Boot.ArkSearchableEncryption" />
+        <item itemvalue="JUnit.EncryptedTreeTest.storageCost" />
       </list>
     </recent_temporary>
   </component>
@@ -310,6 +408,8 @@
       <workItem from="1762753654423" duration="1876000" />
       <workItem from="1763274432274" duration="5406000" />
       <workItem from="1765023567192" duration="595000" />
+      <workItem from="1766033001734" duration="393000" />
+      <workItem from="1766033409182" duration="4057000" />
     </task>
     <task id="LOCAL-00001" summary="update: add PEKS algo &amp; TestUtil">
       <created>1745999105945</created>
@@ -367,34 +467,34 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-method">
-          <url>file://$PROJECT_DIR$/src/main/java/cia/northboat/se/crypto/tree/IPFEUtil.java</url>
+          <url>file://$PROJECT_DIR$/src/main/java/cia/northboat/encryption/crypto/tree/IPFEMachine.java</url>
           <line>88</line>
-          <properties class="cia.northboat.se.crypto.tree.IPFEUtil">
+          <properties class="cia.northboat.encryption.crypto.tree.IPFEMachine" method="match">
             <option name="EMULATED" value="true" />
             <option name="WATCH_EXIT" value="false" />
           </properties>
           <option name="timeStamp" value="6" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-method">
-          <url>file://$PROJECT_DIR$/src/main/java/cia/northboat/se/crypto/tree/IPFEUtil.java</url>
+          <url>file://$PROJECT_DIR$/src/main/java/cia/northboat/encryption/crypto/tree/IPFEMachine.java</url>
           <line>69</line>
-          <properties class="cia.northboat.se.crypto.tree.IPFEUtil">
+          <properties class="cia.northboat.encryption.crypto.tree.IPFEMachine" method="trap">
             <option name="EMULATED" value="true" />
             <option name="WATCH_EXIT" value="false" />
           </properties>
           <option name="timeStamp" value="7" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-method">
-          <url>file://$PROJECT_DIR$/src/main/java/cia/northboat/se/crypto/tree/EncryptedTree.java</url>
+          <url>file://$PROJECT_DIR$/src/main/java/cia/northboat/encryption/crypto/tree/EncryptedTree.java</url>
           <line>174</line>
-          <properties class="cia.northboat.se.crypto.tree.EncryptedTree">
+          <properties class="cia.northboat.encryption.crypto.tree.EncryptedTree" method="getTreeStruct">
             <option name="EMULATED" value="true" />
             <option name="WATCH_EXIT" value="false" />
           </properties>
           <option name="timeStamp" value="10" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/cia/northboat/se/crypto/tree/IPFEUtil.java</url>
+          <url>file://$PROJECT_DIR$/src/main/java/cia/northboat/encryption/crypto/tree/IPFEMachine.java</url>
           <line>107</line>
           <option name="timeStamp" value="9" />
         </line-breakpoint>
