@@ -1,0 +1,836 @@
+---
+date: 2024-10-29 00:00:00
+permalink: /pages/752eb6/
+author: 
+  name: Northboat
+  link: https://github.com/Northboat
+title: 基于 Pairing 的 SE 算法仿真
+---
+
+私以为可搜索加密是广义范围的认证，只是在重量级和匹配机制上有所差异
+
+## 前期工作
+
+### JPBC
+
+IDEA 配置：新建一个纯净的 Maven 项目，在根目录新建目录 lib，将`jpbc-api-2.0.0.jar`和`jpbc-plaf-2.0.0.jar`放入，然后在 IDEA 添加外部包`File -> Project Structure -> Libraries`，点击 + 号，选择 Java，将 lib 目录添加即可
+
+maven pom.xml 配置
+
+本地引入 jar 包
+
+```xml
+<dependency>
+    <groupId>jpbc.api</groupId>
+    <artifactId>api</artifactId>
+    <version>2.0.0</version>
+    <scope>system</scope>
+    <systemPath>${pom.basedir}/lib/jpbc-api-2.0.0.jar</systemPath>
+</dependency>
+
+<dependency>
+    <groupId>jpbc-plaf</groupId>
+    <artifactId>plaf</artifactId>
+    <version>2.0.0</version>
+    <scope>system</scope>
+    <systemPath>${pom.basedir}/lib/jpbc-plaf-2.0.0.jar</systemPath>
+</dependency>
+```
+
+maven 指定主类，设置自动添加路径
+
+```xml
+  <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.2.0</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <mainClass>cia.northboat.Main</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+</build>
+```
+
+导出外部 jar 包
+
+```xml
+<build>
+    <resources>
+        <resource>
+            <directory>lib</directory>
+            <targetPath>/BOOT-INF/lib/</targetPath>
+            <includes>
+                <include>**/*.jar</include>
+            </includes>
+        </resource>
+    </resources>
+</build>
+```
+
+### 群参数
+
+为了方便测试时间，选择使用较小阶的循环群，这里需要使用 JPBC 自带的参数生成函数
+
+```java
+public static void genParams(){
+    // 初始化 type a 类型曲线
+    PairingParametersGenerator pg = new TypeACurveGenerator(160, 512);
+    // 生成参数
+    PairingParameters params = pg.generate();
+    // 打印参数
+    System.out.println(params.toString());
+}
+```
+
+160 为整数群的阶数，打印参数为，保存为`a160.properties`
+
+```
+type a
+q 8780710799663312522437781984754049815806883199414208211028653399266475630880222957078625179422662221423155858769582317459277713367317481324925129998224791
+h 12016012264891146079388821366740534204802954401251311822919615131047207289359704531102844802183906537786776
+r 730750818665451621361119245571504901405976559617
+exp2 159
+exp1 107
+sign1 1
+sign0 1
+```
+
+### 初始化
+
+由于各算法尽量要在相同参数下进行时间开销测试，所有的系统参数应在 Main 函数中初始化，而后作为参数传入各自的构造函数进行系统初始化
+
+```java
+public class Main {
+    private static Pairing bp;
+    private static int n;
+    public static Field G1, G2, GT, Zr;
+
+    static{
+        bp = PairingFactory.getPairing("a160.properties");
+        G1 = bp.getG1();
+        G2 = bp.getG2();
+        GT = bp.getGT();
+        Zr = bp.getZr();
+        n = 12;
+    }
+}
+```
+
+需要注意的是，群上元素 g 的操作会改变 g 本身，比如这里在直接运算时，我想要重新定义一个`g1 = g.add(h)`，此时不光`g1 == g.add(h)`，g 本身也会变成`g.add(h)`
+
+解决这个问题有两种办法
+
+1. 在定义 g 时取`getImmutable()`，令其不可变
+
+   ```java
+   Element g = G1.newRandomElement().getImmutable();
+   
+   Element x = Zr.newRandomElement();
+   Element g5 = g.powZn(x);
+   ```
+
+2. 在计算时取`duplicate()`，复制一份进行计算而不影响其自身
+
+   ```java
+   Element g = G1.newRandomElement();
+   Element x = Zr.newRandomElement();
+   
+   Element g6 = g.duplicate().powZn(x)
+   ```
+
+在仿真时，我将对所有元素都采取`getImmutable()`的操作以避免一些难以发现的问题
+
+## 接口与抽象类
+
+### 接口
+
+SearchableEncryption 接口，基本上 SE 的仿真绕不开这样几个函数
+
+1. setup：系统初始化
+2. keygen：密钥生成
+3. enc：关键词加密
+4. trap：陷门生成
+5. search：匹配
+
+若算法具备密钥更新策略，则还有以下函数
+
+1. updateKey：更新密钥
+2. updateEnc：重新加密
+3. constTrap：重新生成陷门
+4. updateSerach：重新匹配
+
+接口设计围绕上面 8 个函数
+
+```java
+package cia.northboat.se;
+
+import java.util.List;
+
+public interface SearchableEncryption {
+    void setup();
+
+    void keygen();
+
+    default void enc(String w) {
+        throw new UnsupportedOperationException("enc(String w) is not supported");
+    }
+    default void enc(List<String> W) {
+        throw new UnsupportedOperationException("enc(List<String> W) is not supported");
+    }
+
+    default void trap(String q) {
+        throw new UnsupportedOperationException("trap(String q) is not supported");
+    }
+    default void trap(List<String> Q) {
+        throw new UnsupportedOperationException("trap(List<String> Q) is not supported");
+    }
+
+    boolean search();
+
+    default void updateKey() {
+        throw new UnsupportedOperationException("updateKey() is not supported");
+    }
+    default void updateEnc() {
+        throw new UnsupportedOperationException("updateEnc() is not supported");
+    }
+
+    default void constTrap(String q) {
+        throw new UnsupportedOperationException("constTrap(String q) is not supported");
+    }
+    default void constTrap(List<String> Q) {
+        throw new UnsupportedOperationException("constTrap(List<String> Q) is not supported");
+    }
+
+    default boolean updateSearch() {
+        throw new UnsupportedOperationException("updateSearch() is not supported");
+    }
+}
+```
+
+可以注意到，`enc/trap`函数存在重载，因为有的算法传参为单个关键词，而有的为字符串数组，`constTrap`函数同理
+
+新增了一个`test`函数，用于测定三种操作`enc/trap/search`的耗时
+
+```java
+default List<Long> test(List<String> words, int round){
+    long t1 = 0, t2 = 0, t3 = 0;
+    for(int i = 0; i < round; i++){
+        setup();
+        keygen();
+
+        long s1 = System.currentTimeMillis();
+        try{
+            enc(words);
+        }catch (UnsupportedOperationException e){
+            for(String word: words){
+                enc(word);
+            }
+        }
+        long e1 = System.currentTimeMillis();
+        t1 += e1-s1;
+
+
+        long s2 = System.currentTimeMillis();
+        try{
+            trap(words);
+        }catch (UnsupportedOperationException e){
+            for(String word: words){
+                trap(word);
+            }
+        }
+        long e2 = System.currentTimeMillis();
+        t2 += e2-s2;
+
+        long s3 = System.currentTimeMillis();
+        for(int j = 0; j < words.size(); j++)
+            search();
+        long e3 = System.currentTimeMillis();
+        t3 += e3-s3;
+    }
+    return Arrays.asList(t1, t2, t3);
+}
+
+default List<Long> test(List<String> words, int sender, int receiver, int round) {
+    throw new UnsupportedOperationException("test(List<String> words, int sender, int receiver, int round) is not supported");
+}
+```
+
+在这个默认的 test 中，可以注意到，他会先执行 CipherSystem 的`enc(List<String> word)`函数，同时捕捉`UnsupportedOperationException`，若触发，则用一个`for`循环执行`enc(String words)`函数，`trap`同理
+
+若存在密钥更新策略，这个 test 函数就要比较高的定制化，根据需求重载就行了
+
+### 抽象类
+
+CipherSystem 类，实现 SearchableEncryption 接口，初始化几个基本的系统参数
+
+- `Field G, GT, Zr`：所用到的循环群
+- `Pairing bp`：双线性配对函数
+- `int n`：字符串哈希长度
+- `boolean updatable`：是否存在密钥更新策略
+
+还有一些基本的哈希，取随机数、配对的函数
+
+```java
+package cia.northboat.se;
+
+import cia.northboat.util.HashUtil;
+import it.unisa.dia.gas.jpbc.Element;
+import it.unisa.dia.gas.jpbc.Field;
+import it.unisa.dia.gas.jpbc.Pairing;
+
+public abstract class CipherSystem implements SearchableEncryption{
+    Field G, GT, Zr;
+    Pairing bp;
+    int n;
+    boolean updatable;
+
+    public CipherSystem(Field G, Field GT, Field Zr, Pairing bp, int n) {
+        this.G = G;
+        this.GT = GT;
+        this.Zr = Zr;
+        this.bp = bp;
+        this.n = n;
+        this.updatable = false;
+    }
+    public CipherSystem(Field G, Field GT, Field Zr, Pairing bp, int n, boolean updatable) {
+        this.G = G;
+        this.GT = GT;
+        this.Zr = Zr;
+        this.bp = bp;
+        this.n = n;
+        this.updatable = updatable;
+    }
+
+    public Field getG(){
+        return G;
+    }
+
+    public Field getGT() {
+        return GT;
+    }
+
+    public Field getZr() {
+        return Zr;
+    }
+
+    public int getN() {
+        return n;
+    }
+
+    public Pairing getBp() {
+        return bp;
+    }
+
+    public boolean getUpdatable(){
+        return updatable;
+    }
+
+    public Element[] h(String str){
+        return HashUtil.hashStr2ZrArr(Zr, str, n);
+    }
+
+    public Element randomZ(){
+        return Zr.newRandomElement().getImmutable();
+    }
+
+    public Element randomG(){
+        return G.newRandomElement().getImmutable();
+    }
+
+    public Element randomGT(){
+        return GT.newRandomElement().getImmutable();
+    }
+
+    public Element pairing(Element u, Element v){
+        return bp.pairing(u, v).getImmutable();
+    }
+}
+```
+
+## PECKS 算法
+
+以 PECKS 实现为例
+
+### Setup
+
+继承父类 CipherSystem，重载构造函数
+
+```java
+public class PECKS extends CipherSystem {
+    public PECKS(Field G, Field GT, Field Zr, Pairing bp, int n){
+        super(G, GT, Zr, bp, n);
+    }
+}
+```
+
+Seetup
+$$
+PK = (G_1,G_T,e,p,g,g_1,g_2,H,EK,pk_{cs},pk_{ts})
+$$
+其中
+$$
+e:G_1\cdot G_1\rightarrow G_T,g_1=g^{b_1},g_2=g^{b_2},H:\{0,1\}^*\rightarrow G_1
+$$
+
+$$
+EK=g^{\frac{f(x_t)}{b_1}},pk_{cs}=g^{sk_{cs}},pk_{ts}=g^{sk_{ts}},f(x)=b_1+a_1x
+$$
+
+主私钥为
+$$
+MSK=(b_1,b_2,a_1,x_t,k_1,k_2)
+$$
+实现线性函数 f 和哈希函数 H
+
+```java
+public Element f(Element x){
+    return b1.add(a1.mul(x)).getImmutable();
+}
+
+public Element H(String str){
+    Element[] w = h(str);
+    return HashUtil.hashZrArr2Zr(this.getZr(), w);
+}
+```
+
+这个 h 哈希在父类中已经定义过，将一个字符串通过 ASCII 码映射为整数数组
+
+重写 Setup 函数
+
+```java
+private Element g, g1, g2, EK, sk_cs, sk_ts, pk_cs, pk_ts, x_t, b1, a1, b2;
+@Override
+public void setup(){
+    g = this.getG().newRandomElement().getImmutable();
+    a1 = this.getZr().newRandomElement().getImmutable();
+    b1 = this.getZr().newRandomElement().getImmutable();
+    b2 = this.getZr().newRandomElement().getImmutable();
+    x_t = this.getZr().newRandomElement().getImmutable();
+    sk_cs = this.getZr().newRandomElement().getImmutable();
+    sk_ts = this.getZr().newRandomElement().getImmutable();
+
+    g1 = g.powZn(b1).getImmutable();
+    g2 = g.powZn(b2).getImmutable();
+    EK = g.powZn(f(x_t).div(b1)).getImmutable();
+    pk_cs = g.powZn(sk_cs).getImmutable();
+    pk_ts = g.powZn(sk_ts).getImmutable();
+}
+```
+
+### Keygen
+
+相对简单，直接定义元素，然后计算就行
+$$
+SK_i=(D_i,E_i,F_i,G_i),PK_i=g^{y_i}
+$$
+其中
+$$
+D_i=g_2^{f(x_{t_i})\frac{-x_t}{x_{t_i}-x_t}},E_i=g_2^{b_1\frac{-x_{t_i}}{x_t-x_{t_i}}},G_i=y_i\quad x_{t_i},y_i\in Z_p
+$$
+重写 keygen 函数
+
+```java
+Element D_i, E_i, F_i, G_i, PK_i;
+@Override
+public void keygen(){
+    Element x_ti = this.getZr().newRandomElement().getImmutable();
+    Element y_i = this.getZr().newRandomElement().getImmutable();
+
+    D_i = g2.powZn(f(x_ti).mul(x_t.negate().div(x_ti.sub(x_t)))).getImmutable();
+    E_i = g2.powZn(b1.mul(x_ti.negate().div(x_t.sub(x_ti)))).getImmutable();
+    G_i = y_i.getImmutable();
+    PK_i = g.powZn(y_i).getImmutable();
+}
+```
+
+### Enc
+
+同样的，定义变量，重写 enc 函数，注意入参为`List<String> words`
+$$
+C_W=(C_{1,\phi},0\leq\phi\leq l,C_2,C_3,C_4),W=(w_1,w_2,...,w_l)
+$$
+有多项式方程
+$$
+\begin{aligned}
+N(x)&=(x-H(w_1))(x-H(w_2))...(x-H(w_l))+1\\
+&=\pi_lx^l+\pi_{l-1}x^{l-1}+...+\pi_1x+\pi_0+1\\
+&=1
+\end{aligned}
+$$
+在方程 N(x) 中，系数 Π 是根据关键词 W 加密出的内容，根据 Π 计算得到密文
+$$
+C_{1,\phi}=g_1^{r\pi_\phi},C_2=EK^r,C_3=g^r\quad 0\leq\phi\leq l
+$$
+r 是随机整数
+
+可以注意到，这里需要计算多项式方程的系数，方程原型为
+$$
+N(x)=(x-H(w_1))(x-H(w_2))...(x-H(w_l))+1=1
+$$
+当他变换为多项式形式，则有
+$$
+\pi_lx^l+\pi_{l-1}x^{l-1}+...+\pi_1x+\pi_0=1
+$$
+在这参与加密的实际上是多项式系数 π ，而这个 π 实际上只与 H(w) 相关，那么我们的工作转化为，已知 H(w) 这样一个 Element 数组，得到系数数组 π
+
+- 这些系数 π 被称为**初等对称多项式**
+
+对于这样的一个多项式
+$$
+(x−a_1)(x−a_2)…(x−a_n)=x^n−c_1x^{n−1}+c_2x^{n−2}+⋯+(−1)^nc_n
+$$
+我们有
+
+- c1 是所有 ai 的和（即 a1+a2+⋯+an）
+- c2 是所有 ai 的两两乘积之和（即 a1a2+a1a3+⋯+an−1an）
+- c3 是所有 ai 的三三乘积之和（即 a1a2a3+a1a2a4+…）
+- 以此类推，直到 cn 是所有 ai 的乘积（即 a1a2…an）
+
+公式化描述为
+$$
+c_k=(-1)^k\cdot\sum_{1\leq i_1<i_2<...<i_k\leq n}a_{i_1}a_{i_2}...a_{i_k}
+$$
+采用动态规划求解
+
+```java
+public static List<Element> getCoefficients(Field Zr, List<Element> factors){
+    int l = factors.size();
+
+    List<Element> coefficients = new ArrayList<>(l+1);
+    for (int i = 0; i <= l; i++) {
+        coefficients.add(Zr.newZeroElement().getImmutable());
+    }
+
+    coefficients.set(0, Zr.newOneElement().getImmutable());
+    // 动态规划计算系数
+    for (Element factor: factors) {
+        for (int j = l; j >= 1; j--) {
+            // 更新系数：c_j = c_j + c_{j-1} * a_i
+            coefficients.set(j, coefficients.get(j).add(coefficients.get(j - 1).mul(factor)).getImmutable());
+        }
+    }
+    // 添加符号：c_k = (-1)^k * c_k
+    for (int k = 1; k <= l; k++) {
+        if(k % 2 == 1){
+            coefficients.set(k, coefficients.get(k).negate().getImmutable());
+        }
+    }
+    Collections.reverse(coefficients);
+    return coefficients;
+}
+```
+
+最后有一个翻转，因为在加密算法中，最高位恒为 1，最低位为常数位；并且由于多项式在方程中是等于常数 1 的，所以常数位（`pi[0]`）还要人为的加上 One
+
+最后的加密函数长这样
+
+```java
+Element[] C1;
+Element C2, C3;
+int l;
+@Override
+public void enc(List<String> W) {
+    Element r = this.getZr().newRandomElement().getImmutable();
+    C2 = EK.powZn(r).getImmutable();
+    C3 = g.powZn(r).getImmutable();
+
+
+    l = W.size();
+
+    List<Element> factors = new ArrayList<>(l);
+    for(int i = 0; i < l; i++){
+        factors.add(H(W.get(i)));
+    }
+    System.out.println("function params: " + factors);
+
+    List<Element> pi = PolynomialUtil.getCoefficients(this.getZr(), factors);
+    pi.set(0, pi.get(0).add(this.getZr().newOneElement()).getImmutable());
+    System.out.println("polynomial coefficients: " + pi);
+
+    C1 = new Element[l+1];
+    for(int i = 0; i <= l; i++){
+        C1[i] = g1.powZn(r.mul(pi.get(i))).getImmutable();
+    }
+}
+```
+
+### Trap
+
+陷门计算，Q 为搜索的关键词
+$$
+T_Q=(T_1,T_2,T_3),Q=(\overline{w_1},\overline{w_2},...,\overline{w_m}),m\leq l
+$$
+
+$$
+T_1=g_2^{sm^{-1}\sum_{\mu=1}^mH(\overline{w}_\mu)^\phi}\cdot pk_{cs}^r,T_2=E_i^s,T_3=D_i^s,T_4=g^\tau
+$$
+
+并不涉及复杂的运算，唯一需要注意的是求和的实现，即
+$$
+\sum_{\mu=1}^{m}H(\overline w_{\mu})^\varphi
+$$
+其实也简单，一个`for(int i = 0; i <= l; i++)`循环套起来，然后每层 φ 都记为 i，再内层循环遍历每一个字符串进行哈希并幂运算，累加得和，计算每一个 Tφ 即可
+
+重写 trap 函数
+
+```java
+Element[] T1;
+Element T2, T3, T4;
+@Override
+public void trap(List<String> Q) {
+    Element s = this.getZr().newRandomElement().getImmutable(), pi = this.getZr().newRandomElement().getImmutable();
+    T2 = E_i.powZn(s).getImmutable();
+    T3 = D_i.powZn(s).getImmutable();
+    T4 = g.powZn(pi).getImmutable();
+
+    if(Q.size() > l){
+        return;
+    }
+
+    T1 = new Element[l+1];
+    Element m = this.getZr().newElement(Q.size()).getImmutable();
+
+    for(int i = 0; i <= l; i++){
+        Element sum = this.getZr().newZeroElement();
+        Element fai = this.getZr().newElement(i).getImmutable();
+
+        for (String str: Q) {
+            sum.add(H(str).powZn(fai));
+        }
+        sum.getImmutable();
+
+        T1[i] = g2.powZn(s.mul(m.invert()).mul(sum)).mul(pk_cs.powZn(pi)).getImmutable();
+    }
+}
+```
+
+### Search
+
+最简单的一集，直接调用变量即可
+$$
+\Pi_{\phi=0}^le(C_\phi,\frac{T_{1.\phi}}{T_4^{sk_{cs}}})\stackrel{?}{=}e(C_2,T_2)\cdot e(C_3,T_3)
+$$
+重写 search 函数
+
+```java
+@Override
+public boolean search() {
+    Element left = this.getGT().newOneElement();
+    for(int i = 0; i <= l; i++){
+        Element cur = this.getBp().pairing(C1[i], T1[i].div(T4.powZn(sk_cs)));
+        left.mul(cur);
+    }
+    left.getImmutable();
+
+    Element right = this.getBp().pairing(C2, T2).mul(this.getBp().pairing(C3, T3)).getImmutable();
+
+    System.out.println("left: " + left);
+    System.out.println("right: " + right);
+
+    return left.isEqual(right);
+}
+```
+
+### Test
+
+之前也说了，test 函数用来测定`enc/trap/search`的耗时，对于每个算法，他的测定都有不同，比如随着关键词的变化耗时的变化，或随着用户数量耗时的变化，根据不同的需求灵活实现
+
+一个相对简单且通用的实现在**接口定义**时已经 default 实现，有兴趣可以上拉看看
+
+## 测试代码
+
+### 实例化
+
+创建 CipherSystem 实例，用到初始化阶段创建的全局变量
+
+```java
+public static void main(String[] args) {
+
+    int round = 1, sender = 10, receiver = 10;
+
+    String file = "200.txt";
+    List<String> words = FileUtil.readFileToList(file);
+    
+    CipherSystem scf = new SCF(G1, GT, Zr, bp, n);
+    CipherSystem ap = new AP(G1, GT, Zr, bp, n, G2);
+    CipherSystem pecks = new PECKS(G1, GT, Zr, bp, n);
+
+    List<CipherSystem> cipherSystems = new ArrayList<>();
+    cipherSystems.add(scf);
+    cipherSystems.add(ap);
+    cipherSystems.add(pecks);
+
+    executorServiceTest(cipherSystems, words, sender, receiver, round);
+}
+```
+
+### 线程池构造
+
+采用线程池并发跑数据，测试耗时
+
+```java
+public static void executorServiceTest(List<CipherSystem> cipherSystems, List<String> words,
+                                       int sender, int receiver, int round){
+
+    ExecutorService executor = Executors.newFixedThreadPool(cipherSystems.size());
+    List<Future<List<Long>>> futures = new ArrayList<>();
+    // 提交任务
+    for(CipherSystem cipherSystem: cipherSystems){
+        futures.add(executor.submit(() -> cipherSystem.test(words, sender, receiver, round)));
+    }
+
+    // 获取结果
+    try {
+        // 这一步是阻塞的，不用 add 而用 set 是因为有可能先后次序不是我所希望的
+        for(int i = 0; i < futures.size(); i++){
+            Future<List<Long>> future = futures.get(i);
+            times.set(i, future.get());
+        }
+        // 打印结果
+        printTime();
+    } catch (InterruptedException | ExecutionException e) {
+        e.printStackTrace();
+    } finally {
+        // 关闭线程池
+        executor.shutdown();
+    }
+}
+```
+
+并耗时写入全局的`List<List<Long>>`结构来记录，很简单
+
+```java
+// 初始化
+public static List<List<Long>> times;
+static{
+    times = new ArrayList<>();
+}
+
+// test 执行结束后记录时间
+times.add(Arrays.asList(t1/m, t2/m, t3/m));
+
+// 打印时间
+public static void printTime(){
+    System.out.println("======== Time Cost ========");
+    for(List<Long> t: times){
+        for(long i: t){
+            System.out.print(i + "\t\t\t");
+        }
+        System.out.println();
+    }
+}
+```
+
+## 工具类
+
+主要其实是哈希工具
+
+1. 将用户名/字符串原文映射到`G1,GT,Zr`群上，基本就是通过字符的 ASCII 码先映射到整数群 Zr 上，再通过 G1 或 GT 的生成元做幂运算，实现映射
+2. 在群之间进行映射，基本也是通过生成元实现，比如将整数群数组 W 映射到 G1 群，那么就是在生成元 g 上做连续的幂运算得到 W 在 G1 上的映射
+
+但文献上对于字符串实际上给的是`{0,1}*`串，可能是用的布隆过滤器，但这里并不影响仿真，因为我们要做的就是把通用的字符哈希到指定的群上，只要哈希过去，就能进行后续的一系列加密、陷门、匹配操作
+
+另外还有
+
+- 多项式工具：多项式系数提取
+- AES 加解密工具
+- 位运算工具：级联、异或操作（疑似有点问题，DuMSE 没成功）
+
+## 自定义仿真
+
+试图编写一个自定义算法的测试页面
+
+1. 一个表单提交各阶段的变量名、变量计算公式、测试的轮次、测试的关键词
+2. 根据用户提交的变量和解析 Letax 公式构建 CustomCipherSystem 实现可搜索加密测试
+3. 统计`enc, trap, serach`的时间和匹配结果并返回
+
+PS：要注意异常捕捉，测试过程中发生任何异常都直接中断，提示用户检查公式
+
+存储方式上
+
+- 公式的存储以`Map<String, String>`的形式
+- 变量的存储以`Map<String, Element>`的形式
+
+例如在`setup`阶段有
+
+```java
+Element g, h, sk, pk;;
+@Override
+public void setup() {
+    g = randomG();
+    h = randomG();
+    sk = randomZ();
+    pk = g.powZn(sk).getImmutable();
+}
+```
+
+那么我接收到的变量定义就应该是
+
+```json
+setup: {
+    "g": "randomG",
+    "h": "randomG",
+    "sk": "randomZ",
+    "pk": "g^sk"
+}
+```
+
+而后我进行构建，应当构建一个`Map<String, Element>`
+
+```java
+Map<String, String> setup;
+Map<String, Element> map;
+
+@Override
+public void setup() {
+    map = new HashMap<>();
+    for(String key: setup.keySet()){
+        String letax = setup.get(key);
+        map.put(key, LetaxUtil.getElement(map, letax));
+    }
+}
+```
+
+其中
+
+- `Map<String, String> setup`在类初始化时，通过构造函数传入，其他阶段的参数以类似方式传入
+- 关键就是要实现`LetaxUtil.getElement(Map<String, Element> map, String letax)`这个函数
+- 还有一个问题，参数的初始化必须是按顺序来的，`for`遍历 HashMap 可能出现顺序不一致的情况，或许要用到 LinkedHashMap
+
+在前后端交互方面，做五个类似的表单，分别表示在`setup, keygen, enc, trap, serach`五个阶段要用到的变量
+
+- 变量名做文本输入框，就是一个字符串
+- 公式也为文本输入框
+  1. 限定运算符`^, *, /, +, -, inv(), pairing(), =`，一定要注意运算优先级和括号规则
+  2. 如果是随机值，应当给一个多选下拉框，选择变量类型`G1, G2, GT, Zr, String`
+
+传到后端的 json 数据应类似于
+
+```json
+params: {
+    "round": "10",
+    "word": "test",
+    "g": "randomG",
+    "h": "randomG",
+    "sk": "randomZ",
+    "pk": "g^sk",
+    "s": "pairing(g, h)^sk",
+    "verify": "t=pairing(pk, h)"
+}
+```
+
+其中除了`g, h, sk, pk, s`是变量
+
+- round 表示本次测试的轮次，测试时间将取平均值返回
+- word 表示本次测试用到的字符串，用于 enc/trap
+- 最后的 verify 字段用于计算最后的匹配结果，以等号为分割，判断左右两式是否 equal
+
+`round, word, verify`是必填项，且需要在前端将 key 值写死
